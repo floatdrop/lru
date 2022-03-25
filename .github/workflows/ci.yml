@@ -5,10 +5,24 @@ on:
     branches:
       - main
   push:
+    tags:
+      - v*
     branches:
       - main
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.18.0'
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
   test:
     name: Test
     runs-on: ubuntu-latest
