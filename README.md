@@ -1,6 +1,6 @@
 # lru
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/floatdrop/lru.svg)](https://pkg.go.dev/github.com/floatdrop/lru) [![CI](https://github.com/floatdrop/lru/actions/workflows/ci.yml/badge.svg)](https://github.com/floatdrop/lru/actions/workflows/ci.yml)
+[![Go Reference](https://pkg.go.dev/badge/github.com/floatdrop/lru.svg)](https://pkg.go.dev/github.com/floatdrop/lru) [![CI](https://github.com/floatdrop/lru/actions/workflows/ci.yml/badge.svg)](https://github.com/floatdrop/lru/actions/workflows/ci.yml) [![Go Report Card](https://goreportcard.com/badge/github.com/floatdrop/lru)](https://goreportcard.com/report/github.com/floatdrop/lru)
 
 Threadsafe GoLang LRU cache.
 
