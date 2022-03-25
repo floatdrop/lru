@@ -61,6 +61,15 @@ func BenchmarkLRU_Freq(b *testing.B) {
 	b.Logf("hit: %d miss: %d ratio: %f", hit, miss, float64(hit)/float64(miss))
 }
 
+func TestLRU_zero(t *testing.T) {
+	l := New[int, int](0)
+	i := 5
+
+	if e := l.Set(i, i); e == nil || *e != i {
+		t.Fatalf("value should be evicted")
+	}
+}
+
 func TestLRU_setget(t *testing.T) {
 	l := New[int, int](128)
 
@@ -74,6 +83,10 @@ func TestLRU_setget(t *testing.T) {
 
 	if e := l.Get(5); *e != 10 {
 		t.Fatalf("bad returned value: %v != %v", *e, 10)
+	}
+
+	if e := l.Set(5, 9); e == nil || *e != 10 {
+		t.Fatal("old value should be evicted")
 	}
 }
 
