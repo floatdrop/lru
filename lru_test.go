@@ -61,7 +61,23 @@ func BenchmarkLRU_Freq(b *testing.B) {
 	b.Logf("hit: %d miss: %d ratio: %f", hit, miss, float64(hit)/float64(miss))
 }
 
-func TestLRU(t *testing.T) {
+func TestLRU_setget(t *testing.T) {
+	l := New[int, int](128)
+
+	if e := l.Get(5); e != nil {
+		t.Fatalf("bad returned value: %v != nil", e)
+	}
+
+	if l.Set(5, 10) != nil {
+		t.Fatal("should not have evictions")
+	}
+
+	if e := l.Get(5); *e != 10 {
+		t.Fatalf("bad returned value: %v != %v", *e, 10)
+	}
+}
+
+func TestLRU_eviction(t *testing.T) {
 	l := New[int, int](128)
 
 	evictCounter := 0
