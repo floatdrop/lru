@@ -34,9 +34,10 @@ func (L *LRU[K, V]) Get(key K) *V {
 }
 
 // Set inserts key value pair and returns evicted value, if cache was full.
+// If cache size is less than 1 – method will always return reference to value (as if it was immediately evicted).
 func (L *LRU[K, V]) Set(key K, value V) *V {
-	if L.size == 0 {
-		return nil
+	if L.size < 1 {
+		return &value
 	}
 
 	L.m.Lock()
