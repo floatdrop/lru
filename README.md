@@ -25,6 +25,50 @@ func ExampleLRU() {
 }
 ```
 
+## TTL
+
+```go
+import (
+	"fmt"
+
+	"github.com/floatdrop/lru"
+)
+
+type Expiring[T any] struct {
+	value      *T
+}
+
+func (E *Expiring[T]) Valid() *T {
+	if E == nil {
+		return nil
+	}
+
+	return E.value
+}
+
+func WithTTL[T any](value T, ttl time.Duration) Expiring[T] {
+	e := Expiring[T]{
+		value:      &value,
+	}
+
+    time.AfterFunc(ttl, func() {
+        e.value = nil // Release memory
+    })
+
+	return e
+}
+
+func main() {
+	l := lru.New[string, Expiring[string]](256)
+
+	l.Set("Hello", WithTTL("Bye", time.Hour))
+
+	if e := l.Get("Hello").Valid(); e != nil {
+		fmt.Println(*e)
+	}
+}
+```
+
 ## Benchmarks
 
 ```
