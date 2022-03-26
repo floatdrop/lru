@@ -15,7 +15,7 @@ import (
 	"github.com/floatdrop/lru"
 )
 
-func ExampleLRU() {
+func main() {
 	cache := lru.New[string, int](256)
 
 	cache.Set("Hello", 5)
@@ -27,48 +27,53 @@ func ExampleLRU() {
 
 ## TTL
 
-```go
-import (
-	"fmt"
-	"time"
+You can wrap values into `Expiring[T any]` struct to release memory on timer (or manually in `Valid` method).
 
-	"github.com/floatdrop/lru"
-)
+<details>
+    <summary>Example implementation</summary>
+    ```go
+    import (
+        "fmt"
+        "time"
 
-type Expiring[T any] struct {
-	value *T
-}
+        "github.com/floatdrop/lru"
+    )
 
-func (E *Expiring[T]) Valid() *T {
-	if E == nil {
-		return nil
-	}
+    type Expiring[T any] struct {
+        value *T
+    }
 
-	return E.value
-}
+    func (E *Expiring[T]) Valid() *T {
+        if E == nil {
+            return nil
+        }
 
-func WithTTL[T any](value T, ttl time.Duration) Expiring[T] {
-	e := Expiring[T]{
-		value: &value,
-	}
+        return E.value
+    }
 
-	time.AfterFunc(ttl, func() {
-		e.value = nil // Release memory
-	})
+    func WithTTL[T any](value T, ttl time.Duration) Expiring[T] {
+        e := Expiring[T]{
+            value: &value,
+        }
 
-	return e
-}
+        time.AfterFunc(ttl, func() {
+            e.value = nil // Release memory
+        })
 
-func main() {
-	l := lru.New[string, Expiring[string]](256)
+        return e
+    }
 
-	l.Set("Hello", WithTTL("Bye", time.Hour))
+    func main() {
+        l := lru.New[string, Expiring[string]](256)
 
-	if e := l.Get("Hello").Valid(); e != nil {
-		fmt.Println(*e)
-	}
-}
-```
+        l.Set("Hello", WithTTL("Bye", time.Hour))
+
+        if e := l.Get("Hello").Valid(); e != nil {
+            fmt.Println(*e)
+        }
+    }
+    ```
+</details>
 
 ## Benchmarks
 
