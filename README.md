@@ -86,4 +86,8 @@ floatdrop/lru:
 hashicorp/golang-lru:
     BenchmarkLRU_Rand-8   	 5992782	       195.8 ns/op	      76 B/op	       3 allocs/op
     BenchmarkLRU_Freq-8   	 6355358	       186.1 ns/op	      71 B/op	       3 allocs/op
+
+jellydator/ttlcache:
+    BenchmarkLRU_Rand-8   	 4447654	       253.5 ns/op	     144 B/op	       2 allocs/op
+    BenchmarkLRU_Freq-8   	 4837938	       240.9 ns/op	     137 B/op	       2 allocs/op
 ```
