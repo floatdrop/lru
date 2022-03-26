@@ -35,7 +35,7 @@ import (
 )
 
 type Expiring[T any] struct {
-	value      *T
+	value *T
 }
 
 func (E *Expiring[T]) Valid() *T {
@@ -48,12 +48,12 @@ func (E *Expiring[T]) Valid() *T {
 
 func WithTTL[T any](value T, ttl time.Duration) Expiring[T] {
 	e := Expiring[T]{
-		value:      &value,
+		value: &value,
 	}
 
-    time.AfterFunc(ttl, func() {
-        e.value = nil // Release memory
-    })
+	time.AfterFunc(ttl, func() {
+		e.value = nil // Release memory
+	})
 
 	return e
 }
