@@ -30,6 +30,7 @@ func ExampleLRU() {
 ```go
 import (
 	"fmt"
+	"time"
 
 	"github.com/floatdrop/lru"
 )
