@@ -70,6 +70,20 @@ func TestLRU_zero(t *testing.T) {
 	}
 }
 
+func TestLRU_defaultkey(t *testing.T) {
+	l := New[string, int](1)
+	var k string
+	v := 10
+
+	if e := l.Set(k, v); e != nil {
+		t.Fatalf("value should not be evicted")
+	}
+
+	if e := l.Get(k); e == nil || *e != v {
+		t.Fatalf("bad returned value: %v != %v", e, v)
+	}
+}
+
 func TestLRU_setget(t *testing.T) {
 	l := New[int, int](128)
 
