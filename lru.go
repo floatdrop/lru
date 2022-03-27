@@ -20,6 +20,12 @@ type entry[K comparable, V any] struct {
 	value *V
 }
 
+// Evicted holds key/value pair that was evicted from cache.
+type Evicted[K comparable, V any] struct {
+	Key K
+	Value V
+}
+
 // Get returns pointer to value for key, if value was in cache (nil returned otherwise).
 func (L *LRU[K, V]) Get(key K) *V {
 	L.m.Lock()
@@ -35,9 +41,9 @@ func (L *LRU[K, V]) Get(key K) *V {
 
 // Set inserts key value pair and returns evicted value, if cache was full.
 // If cache size is less than 1 – method will always return reference to value (as if it was immediately evicted).
-func (L *LRU[K, V]) Set(key K, value V) *V {
+func (L *LRU[K, V]) Set(key K, value V) *Evicted[K, V] {
 	if L.size < 1 {
-		return &value
+		return &Evicted[K, V]{key, value}
 	}
 
 	L.m.Lock()
@@ -47,7 +53,7 @@ func (L *LRU[K, V]) Set(key K, value V) *V {
 		previousValue := e.Value.value
 		L.ll.MoveToFront(e)
 		e.Value.value = &value
-		return previousValue
+		return &Evicted[K, V]{key, *previousValue}
 	}
 
 	e := L.ll.Back()
@@ -59,7 +65,10 @@ func (L *LRU[K, V]) Set(key K, value V) *V {
 	i.value = &value
 	L.cache[key] = e
 	L.ll.MoveToFront(e)
-	return evictedValue
+	if evictedValue != nil {
+		return &Evicted[K, V]{key, *evictedValue}
+	}
+	return nil
 }
 
 // Len returns number of cached items.

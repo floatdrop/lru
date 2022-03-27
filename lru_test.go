@@ -65,7 +65,7 @@ func TestLRU_zero(t *testing.T) {
 	l := New[int, int](0)
 	i := 5
 
-	if e := l.Set(i, i); e == nil || *e != i {
+	if e := l.Set(i, i); e == nil || e.Value != i {
 		t.Fatalf("value should be evicted")
 	}
 
@@ -103,7 +103,7 @@ func TestLRU_setget(t *testing.T) {
 		t.Fatalf("bad returned value: %v != %v", *e, 10)
 	}
 
-	if e := l.Set(5, 9); e == nil || *e != 10 {
+	if e := l.Set(5, 9); e == nil || e.Value != 10 {
 		t.Fatal("old value should be evicted")
 	}
 }
