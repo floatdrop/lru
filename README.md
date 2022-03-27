@@ -84,8 +84,8 @@ func main() {
 
 ```
 floatdrop/lru:
-    BenchmarkLRU_Rand-8   	 9373129	       124.4 ns/op	       8 B/op	       1 allocs/op
-    BenchmarkLRU_Freq-8   	10124833	       120.3 ns/op	       8 B/op	       1 allocs/op
+    BenchmarkLRU_Rand-8   	 8802915	       131.7 ns/op	      24 B/op	       1 allocs/op
+    BenchmarkLRU_Freq-8   	 9392769	       127.8 ns/op	      24 B/op	       1 allocs/op
 
 hashicorp/golang-lru:
     BenchmarkLRU_Rand-8   	 5992782	       195.8 ns/op	      76 B/op	       3 allocs/op
