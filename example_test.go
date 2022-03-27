@@ -11,6 +11,8 @@ func ExampleLRU() {
 
 	cache.Set("Hello", 5)
 
-	fmt.Println(*cache.Get("Hello"))
-	// Output: 5
+	if e := cache.Get("Hello"); e != nil {
+		fmt.Println(*cache.Get("Hello"))
+		// Output: 5
+	}
 }
