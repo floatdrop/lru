@@ -74,6 +74,8 @@ func main() {
     }
 }
 ```
+
+**Note:** Althou this short implementation frees memory after ttl duration, it will not erase entry for key in cache. It can be a problem, if you do not check nillnes after getting element from cache and call `Set` afterwards.
 </details>
 
 ## Benchmarks
