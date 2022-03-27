@@ -9,8 +9,8 @@ func (n *Nop[K, V]) Get(key K) *V {
 }
 
 // Set method of Nop cache always returns value pointer (as if it was immediately evicted).
-func (n *Nop[K, V]) Set(key K, value V) *V {
-	return &value
+func (n *Nop[K, V]) Set(key K, value V) *Evicted[K, V] {
+	return &Evicted[K, V]{key, value}
 }
 
 // Len method of Nop cache always returns 0.

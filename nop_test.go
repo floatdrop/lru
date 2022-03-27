@@ -8,7 +8,7 @@ var _ Cache[int, int] = &Nop[int, int]{}
 func TestNop(t *testing.T) {
 	l := &Nop[int, int]{}
 
-	if e := l.Set(5, 5); e == nil || *e != 5 {
+	if e := l.Set(5, 5); e == nil || e.Value != 5 {
 		t.Fatal("value should be evicted")
 	}
 

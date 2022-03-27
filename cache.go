@@ -4,7 +4,7 @@ package lru
 type Cache[K comparable, V any] interface {
 	Get(key K) *V
 
-	Set(key K, value V) *V
+	Set(key K, value V) *Evicted[K, V]
 
 	Len() int
 
