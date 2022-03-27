@@ -20,8 +20,10 @@ func main() {
 
 	cache.Set("Hello", 5)
 
-	fmt.Println(*cache.Get("Hello"))
-	// Output: 5
+	if e := cache.Get("Hello"); e != nil {
+		fmt.Println(*e)
+		// Output: 5
+	}
 }
 ```
 
