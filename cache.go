@@ -5,4 +5,10 @@ type Cache[K comparable, V any] interface {
 	Get(key K) *V
 
 	Set(key K, value V) *V
+
+	Len() int
+
+	Remove(key K) *V
+
+	Peek(key K) *V
 }
