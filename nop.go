@@ -12,3 +12,18 @@ func (n *Nop[K, V]) Get(key K) *V {
 func (n *Nop[K, V]) Set(key K, value V) *V {
 	return &value
 }
+
+// Len method of Nop cache always returns 0.
+func (n *Nop[K, V]) Len() int {
+	return 0
+}
+
+// Remove method of Nop cache always returns nil.
+func (n *Nop[K, V]) Remove(key K) *V {
+	return nil
+}
+
+// Peek method of Nop cache always returns nil.
+func (n *Nop[K, V]) Peek(key K) *V {
+	return nil
+}

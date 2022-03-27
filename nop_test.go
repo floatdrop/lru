@@ -15,4 +15,16 @@ func TestNop(t *testing.T) {
 	if l.Get(5) != nil {
 		t.Fatal("no values should be in nop cache")
 	}
+
+	if l.Peek(5) != nil {
+		t.Fatal("no values should be in nop cache")
+	}
+
+	if l.Remove(5) != nil {
+		t.Fatal("no values should be in nop cache")
+	}
+
+	if l.Len() != 0 {
+		t.Fatal("size should always be 0")
+	}
 }

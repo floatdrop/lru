@@ -68,6 +68,10 @@ func TestLRU_zero(t *testing.T) {
 	if e := l.Set(i, i); e == nil || *e != i {
 		t.Fatalf("value should be evicted")
 	}
+
+	if e := l.Remove(i); e != nil {
+		t.Fatalf("value should not be removed")
+	}
 }
 
 func TestLRU_defaultkey(t *testing.T) {
@@ -114,6 +118,10 @@ func TestLRU_eviction(t *testing.T) {
 		}
 	}
 
+	if l.Len() != 128 {
+		t.Fatalf("bad len: %v", l.Len())
+	}
+
 	if evictCounter != 128 {
 		t.Fatalf("bad evict count: %v", evictCounter)
 	}
@@ -123,9 +131,32 @@ func TestLRU_eviction(t *testing.T) {
 			t.Fatalf("should be evicted")
 		}
 	}
+
 	for i := 128; i < 256; i++ {
 		if e := l.Get(i); e == nil {
 			t.Fatalf("should not be evicted")
 		}
+	}
+
+	for i := 128; i < 192; i++ {
+		l.Remove(i)
+		if e := l.Get(i); e != nil {
+			t.Fatalf("should be deleted")
+		}
+	}
+}
+
+func TestLRU_peek(t *testing.T) {
+	l := New[int, int](2)
+
+	l.Set(1, 1)
+	l.Set(2, 2)
+	if v := l.Peek(1); v == nil || *v != 1 {
+		t.Errorf("1 should be set to 1: %v,", v)
+	}
+
+	l.Set(3, 3)
+	if l.Peek(1) != nil {
+		t.Errorf("should not have updated recent-ness of 1")
 	}
 }

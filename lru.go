@@ -62,6 +62,42 @@ func (L *LRU[K, V]) Set(key K, value V) *V {
 	return evictedValue
 }
 
+// Len returns number of cached items.
+func (L *LRU[K, V]) Len() int {
+	L.m.Lock()
+	defer L.m.Unlock()
+
+	return len(L.cache)
+}
+
+// Remove method removes entry associated with key and returns pointer to removed value (or nil if entry was not in cache).
+func (L *LRU[K, V]) Remove(key K) *V {
+	L.m.Lock()
+	defer L.m.Unlock()
+
+	if e, ok := L.cache[key]; ok {
+		value := e.Value.value
+		L.ll.MoveToBack(e)
+		e.Value.value = nil
+		delete(L.cache, key)
+		return value
+	}
+
+	return nil
+}
+
+// Peek returns value for key (if key was in cache), but does not modify its recency.
+func (L *LRU[K, V]) Peek(key K) *V {
+	L.m.Lock()
+	defer L.m.Unlock()
+
+	if e, ok := L.cache[key]; ok {
+		return e.Value.value
+	}
+
+	return nil
+}
+
 // New creates LRU cache with size capacity. Cache will preallocate size count of internal structures to avoid allocation in process.
 func New[K comparable, V any](size int) *LRU[K, V] {
 	c := &LRU[K, V]{
