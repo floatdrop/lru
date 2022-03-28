@@ -58,6 +58,7 @@ func (L *LRU[K, V]) Set(key K, value V) *Evicted[K, V] {
 
 	e := L.ll.Back()
 	i := e.Value
+	evictedKey := i.key
 	evictedValue := i.value
 	delete(L.cache, i.key)
 
@@ -66,7 +67,7 @@ func (L *LRU[K, V]) Set(key K, value V) *Evicted[K, V] {
 	L.cache[key] = e
 	L.ll.MoveToFront(e)
 	if evictedValue != nil {
-		return &Evicted[K, V]{key, *evictedValue}
+		return &Evicted[K, V]{evictedKey, *evictedValue}
 	}
 	return nil
 }
