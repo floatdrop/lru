@@ -5,9 +5,6 @@ import (
 	"testing"
 )
 
-// LRU should be compatible with Cache interface.
-var _ Cache[int, int] = &LRU[int, int]{}
-
 func BenchmarkLRU_Rand(b *testing.B) {
 	l := New[int64, int64](8192)
 
