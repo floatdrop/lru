@@ -62,6 +62,10 @@ func TestLRU_zero(t *testing.T) {
 	l := New[int, int](0)
 	i := 5
 
+	if l.Victim() != nil {
+		t.Errorf("should have no victims in zero cache")
+	}
+
 	if e := l.Set(i, i); e == nil || e.Value != i {
 		t.Fatalf("value should be evicted")
 	}
@@ -155,5 +159,26 @@ func TestLRU_peek(t *testing.T) {
 	l.Set(3, 3)
 	if l.Peek(1) != nil {
 		t.Errorf("should not have updated recent-ness of 1")
+	}
+}
+
+func TestLRU_victim(t *testing.T) {
+	l := New[int, int](2)
+	if l.Victim() != nil {
+		t.Errorf("should have no victims in empty cache")
+	}
+
+	l.Set(1, 1)
+	if l.Victim() != nil {
+		t.Errorf("victim should be nil in not full cache")
+	}
+
+	l.Set(2, 2)
+	if v := l.Peek(1); v == nil || *v != 1 {
+		t.Errorf("1 should be set to 1: %v,", v)
+	}
+
+	if v := l.Victim(); v == nil || *v != 1 {
+		t.Errorf("victim should be set to oldest item")
 	}
 }
