@@ -22,7 +22,7 @@ type entry[K comparable, V any] struct {
 
 // Evicted holds key/value pair that was evicted from cache.
 type Evicted[K comparable, V any] struct {
-	Key K
+	Key   K
 	Value V
 }
 
@@ -103,6 +103,28 @@ func (L *LRU[K, V]) Peek(key K) *V {
 
 	if e, ok := L.cache[key]; ok {
 		return e.Value.value
+	}
+
+	return nil
+}
+
+// Victim returns pointer to a key, that will be evicted on next Set call (or nil if there is a space for another key).
+// If cache size is 0 - nil will be always returned.
+func (L *LRU[K, V]) Victim() *K {
+	if L.size < 1 {
+		return nil
+	}
+
+	L.m.Lock()
+	defer L.m.Unlock()
+
+	e := L.ll.Back()
+	i := e.Value
+	evictedKey := i.key
+	evictedValue := i.value
+
+	if evictedValue != nil {
+		return &evictedKey
 	}
 
 	return nil
